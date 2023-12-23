@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Answering App</title>
+</head>
+<body>
+    <h1>Question Answering App</h1>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'myqa:browse_file' %}">
+        {% csrf_token %}
+        <input type="file" name="file" accept=".txt" required>
+        <button type="submit">Upload File</button>
+    </form>
+
+    {% if file_load_message %}
+    <h2>{{ file_load_message }}</h2>
+    <h2>Context</h2>
+    <p>{{ content }}</p>
+    {% endif %}
+    <h2>Ask a Question</h2>
+    <form method="post" action="{% url 'myqa:answer_question' %}">
+        {% csrf_token %}
+        <input type="hidden" name="context" value="{{ content }}">
+        <label for="question">Question:</label>
+        <input type="text" name="question" id="question" required>
+        <button type="submit">Answer Question</button>
+    </form>
+    {% if content and question %}
+    <h2>Received Context:</h2>
+    <p>{{ content }}</p>
+
+    <h2>Received Question:</h2>
+    <p>{{ question }}</p>
+
+    <h2>Answer:</h2>
+    <p>{{ answer }}</p>
+    {% endif %}
+
+</body>
+</html>
